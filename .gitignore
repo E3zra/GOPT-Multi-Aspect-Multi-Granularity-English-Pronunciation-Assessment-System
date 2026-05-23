@@ -26,10 +26,10 @@ env/
 __MACOSX/
 Thumbs.db
 
-# User-generated task data (not original datasets)
-data/raw_kaldi_gop/task_*/
-data/seq_data_task_*/
-data/seq_data_test_audio_*/
+# Data files (too large for GitHub, download separately)
+# See data/README.md for download links
+data/raw_kaldi_gop/
+data/seq_data_*/
 
 # Kaldi models (624MB, download separately - see setup_models.py)
 models/
