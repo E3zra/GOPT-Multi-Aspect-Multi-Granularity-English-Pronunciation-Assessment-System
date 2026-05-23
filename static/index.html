@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOPT 发音评估系统</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎙️ GOPT 发音评估系统</h1>
+            <p class="subtitle">Goodness of Pronunciation Transformer - 基于深度学习的英语发音评估</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="card">
+                <h2>📁 上传音频文件</h2>
+                
+                <!-- File Drop Zone -->
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-icon">📤</div>
+                    <p class="drop-zone-text">拖放音频文件到此处</p>
+                    <p class="drop-zone-subtext">或</p>
+                    <button type="button" class="btn-select" id="selectFileBtn">选择文件</button>
+                    <input type="file" id="fileInput" accept=".wav,.mp3,.m4a,.flac,.ogg,.aac,.wma,audio/*" style="display: none;">
+                    <div class="file-requirements">
+                        <p><strong>音频要求：</strong></p>
+                        <ul>
+                            <li>格式: WAV, MP3, M4A, FLAC, OGG, AAC, WMA</li>
+                            <li>自动转换为 16kHz 单声道</li>
+                            <li>时长: 5-30 秒</li>
+                            <li>大小: 最大 50MB</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- File Info -->
+                <div class="file-info" id="fileInfo" style="display: none;">
+                    <div class="file-info-content">
+                        <span class="file-icon">🎵</span>
+                        <div class="file-details">
+                            <p class="file-name" id="fileName"></p>
+                            <p class="file-size" id="fileSize"></p>
+                        </div>
+                        <button class="btn-remove" id="removeFileBtn">✕</button>
+                    </div>
+                </div>
+
+                <!-- Transcript Input -->
+                <div class="transcript-section">
+                    <label for="transcriptInput">
+                        <strong>📝 音频文本转录</strong>
+                        <span class="optional-badge">如果发音不标准，自动识别可能出错</span>
+                    </label>
+                    <textarea 
+                        id="transcriptInput" 
+                        placeholder="请输入音频中说的英文内容（全大写，无标点符号）&#10;例如: HELLO WORLD HOW ARE YOU TODAY&#10;&#10;或点击下方"自动识别"按钮，让AI帮你识别音频内容..."
+                        rows="4"
+                    ></textarea>
+                    
+                    <!-- ASR Controls -->
+                    <div class="asr-controls" style="margin-top: 10px; display: flex; gap: 10px;">
+                        <button type="button" class="btn-transcribe" id="transcribeBtn" disabled>
+                            🎤 自动识别
+                        </button>
+                        <button type="button" class="btn-clear" id="clearTranscriptBtn" style="display: none;">
+                            🗑️ 清空文本
+                        </button>
+                        <div id="asrStatus" style="display: none; padding: 8px 15px; background-color: #e3f2fd; border-radius: 5px; font-size: 0.9em; color: #1976d2;">
+                            <span id="asrStatusText">正在识别...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="transcript-tips">
+                        <p><strong>格式要求：</strong></p>
+                        <ul>
+                            <li>全部大写字母 (自动转换)</li>
+                            <li>不含标点符号</li>
+                            <li>仅英文单词，空格分隔</li>
+                            <li>避免缩写 (如 IT'S 改为 IT IS)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn-submit" id="submitBtn" disabled>
+                    开始评估
+                </button>
+            </div>
+        </section>
+
+        <!-- Processing Section -->
+        <section class="processing-section" id="processingSection" style="display: none;">
+            <div class="card">
+                <h2>⚙️ 正在处理</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">准备中...</p>
+                </div>
+                <div class="processing-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <p class="processing-note" id="processingNote">
+                    处理过程可能需要 3-5 分钟，请耐心等待...
+                </p>
+                <!-- Segmentation progress info -->
+                <div id="segmentProgress" style="display: none; margin-top: 15px; padding: 10px; background-color: #e8f5e9; border-radius: 8px;">
+                    <p style="margin: 0; font-weight: bold; color: #2e7d32;">📊 正在分段处理</p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9em;" id="segmentProgressText"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <div class="card">
+                <div class="results-header">
+                    <h2>📊 评估结果</h2>
+                    <div class="results-actions">
+                        <button class="btn-download" id="downloadBtn">📥 下载结果</button>
+                        <button class="btn-new" id="newAssessmentBtn">🔄 新建评估</button>
+                    </div>
+                </div>
+
+                <!-- File Info in Results -->
+                <div class="result-file-info">
+                    <p><strong>文件名：</strong> <span id="resultFileName"></span></p>
+                    <p><strong>转录文本：</strong> <span id="resultTranscript"></span></p>
+                    <!-- Segmentation Info -->
+                    <div id="segmentationInfo" style="display: none; margin-top: 10px; padding: 10px; background-color: #e3f2fd; border-left: 4px solid #2196F3; border-radius: 4px;">
+                        <p style="margin: 0; font-weight: bold; color: #1976D2;">📊 长音频自动分段处理</p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9em;" id="segmentationDetails"></p>
+                    </div>
+                </div>
+
+                <!-- Utterance Scores -->
+                <div class="scores-grid" id="scoresGrid">
+                    <!-- Score cards will be inserted here dynamically -->
+                </div>
+
+                <!-- Feedback Section -->
+                <div class="feedback-section" id="feedbackSection" style="display: none;">
+                    <h3>💬 整体反馈 (Overall Feedback)</h3>
+                    <div class="feedback-card" id="feedbackCard">
+                        <!-- Feedback content will be inserted here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Word Scores -->
+                <div class="word-scores" id="wordScoresSection" style="display: none;">
+                    <h3>📝 单词级评分 (Word-Level Scores)</h3>
+                    <p class="word-scores-subtitle">点击单词查看详细评分 · 颜色表示总分高低</p>
+                    <div class="word-sentence" id="wordSentence">
+                        <!-- Words will be inserted here as a sentence -->
+                    </div>
+                    <!-- Tooltip for word details -->
+                    <div class="word-tooltip" id="wordTooltip" style="display: none;">
+                        <div class="tooltip-header">
+                            <span class="tooltip-word"></span>
+                            <span class="tooltip-close" onclick="hideWordTooltip()">×</span>
+                        </div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-row">
+                                <span class="tooltip-label">准确度 (Accuracy):</span>
+                                <span class="tooltip-value" id="tooltipAccuracy"></span>
+                            </div>
+                            <div class="tooltip-row">
+                                <span class="tooltip-label">重音 (Stress):</span>
+                                <span class="tooltip-value" id="tooltipStress"></span>
+                            </div>
+                            <div class="tooltip-row">
+                                <span class="tooltip-label">总分 (Total):</span>
+                                <span class="tooltip-value" id="tooltipTotal"></span>
+                            </div>
+                            <div class="tooltip-row">
+                                <span class="tooltip-label">音素数量:</span>
+                                <span class="tooltip-value" id="tooltipPhoneCount"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Scores -->
+                <div class="phone-scores">
+                    <h3>🔤 音素级评分 (Phoneme-Level Scores)</h3>
+                    <p class="phone-scores-subtitle">显示前 20 个音素的评分</p>
+                    <div class="phone-scores-table" id="phoneScoresTable">
+                        <!-- Phone scores table will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Raw JSON Data -->
+                <details class="raw-data">
+                    <summary>🔍 查看原始 JSON 数据</summary>
+                    <pre id="rawJsonData"></pre>
+                </details>
+            </div>
+        </section>
+
+        <!-- Error Section -->
+        <section class="error-section" id="errorSection" style="display: none;">
+            <div class="card error-card">
+                <h2>❌ 处理错误</h2>
+                <p class="error-message" id="errorMessage"></p>
+                <details class="error-details">
+                    <summary>查看详细错误信息</summary>
+                    <pre id="errorDetails"></pre>
+                </details>
+                <button class="btn-new" id="retryBtn">🔄 重新尝试</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                GOPT (Goodness of Pronunciation Transformer) - 
+                基于 Transformer 的多维度英语发音评估系统
+            </p>
+            <p class="footer-links">
+                <a href="https://github.com/yourusername/gopt" target="_blank">GitHub</a> |
+                <a href="/docs" target="_blank">API 文档</a> |
+                <a href="#" id="healthCheckLink">系统状态</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Health Status Modal -->
+    <div class="modal" id="healthModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>系统状态</h3>
+                <button class="modal-close" id="closeHealthModal">✕</button>
+            </div>
+            <div class="modal-body" id="healthModalBody">
+                <p>正在检查...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
+

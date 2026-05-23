@@ -1,0 +1,28 @@
+torch==1.12.1
+kaldi-io==0.9.4
+kaldiio==2.17.2
+numpy
+
+# G2P for out-of-vocabulary word handling
+g2p-en>=2.1.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+
+# API Server (optional - only needed for REST API)
+fastapi>=0.68.0
+uvicorn>=0.15.0
+pydantic>=1.8.0
+
+# Web Interface dependencies
+aiofiles>=0.8.0
+python-multipart>=0.0.5
+
+# Whisper ASR for automatic speech recognition
+openai-whisper>=20230314
+# Whisper dependencies
+numba>=0.57.0
+
+# Benchmark utilities
+psutil>=5.9.0

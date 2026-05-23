@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv*/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# pytest
+.pytest_cache/
+
+# OS junk
+.DS_Store
+__MACOSX/
+Thumbs.db
+
+# User-generated task data (not original datasets)
+data/raw_kaldi_gop/task_*/
+data/seq_data_task_*/
+data/seq_data_test_audio_*/
+
+# Kaldi models (624MB, download separately - see setup_models.py)
+models/
+
+# User runtime files
+audio_input/
+audio_output/
+audio_processing_output/
+
+# Experiment outputs
+exp/
+
+# Logs
+*.log
+
+# Temp
+temp/
+
+# PDFs
+*.pdf
+
+# Old/legacy
+data_release/
+data.zip
+data_old/
+src/temp/
+TODO.txt
+*result_old.csv
+colab/GOPT_old.ipynb

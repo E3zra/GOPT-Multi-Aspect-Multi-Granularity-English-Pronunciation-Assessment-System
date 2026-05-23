@@ -1,0 +1,79 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Python cache
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+venv-gopt/
+venv-gopt-new/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Large data files (use volumes instead, mount as volumes in docker-compose)
+audio_input/
+audio_output/
+models/
+data/
+exp/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Backup files
+*.backup
+*.bak
+*_backup_*
+
+# Test results
+*.json
+!requirements.json
+
+# Documentation (optional, include if needed)
+*.md
+!README.md
+
+# Jupyter notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Keep important files even if they match patterns
+!docker/*.sh
+!*.py

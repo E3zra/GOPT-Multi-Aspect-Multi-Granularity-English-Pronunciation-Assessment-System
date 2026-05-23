@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOPT 发音评估反馈 - Feedback Showcase</title>
+    <style>
+        /* ============================================
+           GOPT Web Interface - Feedback Demo Styles
+           ============================================ */
+
+        :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #357abd;
+            --secondary-color: #50c878;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --text-color: #333;
+            --text-light: #666;
+            --background: #f5f7fa;
+            --card-background: #ffffff;
+            --border-color: #e1e8ed;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--background);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        /* ===== Feedback Section ===== */
+        .feedback-section {
+            margin: 30px 0;
+        }
+
+        .feedback-section h3 {
+            margin-bottom: 15px;
+            color: var(--text-color);
+            font-size: 1.5rem;
+        }
+
+        .feedback-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .feedback-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .feedback-card.excellent {
+            border-left-color: var(--secondary-color);
+            background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+        }
+
+        .feedback-card.good {
+            border-left-color: var(--warning-color);
+            background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+        }
+
+        .feedback-card.needs-improvement {
+            border-left-color: var(--danger-color);
+            background: linear-gradient(135deg, #ffebee 0%, #ffffff 100%);
+        }
+
+        .feedback-level {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feedback-level.excellent {
+            background: linear-gradient(135deg, var(--secondary-color), #43e97b);
+            color: white;
+        }
+
+        .feedback-level.good {
+            background: linear-gradient(135deg, var(--warning-color), #ffd54f);
+            color: white;
+        }
+
+        .feedback-level.needs-improvement {
+            background: linear-gradient(135deg, var(--danger-color), #ff6b6b);
+            color: white;
+        }
+
+        .feedback-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feedback-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .feedback-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .feedback-highlights {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-highlights h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .feedback-highlights ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feedback-highlights li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .feedback-highlights li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .feedback-highlights.excellent li::before {
+            color: var(--secondary-color);
+        }
+
+        .feedback-highlights.good li::before {
+            color: var(--warning-color);
+        }
+
+        .feedback-highlights.needs-improvement li::before {
+            content: '•';
+            color: var(--danger-color);
+        }
+
+        .feedback-suggestions {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: var(--border-radius);
+        }
+
+        .feedback-suggestions h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .feedback-suggestions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feedback-suggestions li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .feedback-suggestions li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .demo-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .demo-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .demo-info p {
+            color: var(--text-light);
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎙️ GOPT 发音评估反馈</h1>
+            <p class="subtitle">Pronunciation Assessment Feedback - 智能三级反馈系统</p>
+        </header>
+
+        <!-- Level 1: Excellent -->
+        <div class="card">
+            <h2>优秀级别反馈 (Excellent Level)</h2>
+            <div class="feedback-section">
+                <div class="feedback-card excellent">
+                    <span class="feedback-icon">🌟</span>
+                    <span class="feedback-level excellent">优秀</span>
+                    <div class="feedback-title">太棒了！你的发音非常出色！</div>
+                    <div class="feedback-description">
+                        听完你的录音，我真的很惊喜！总分 1.70 分，这已经是一个非常优秀的成绩了。你的发音清晰自然，听起来就像母语者一样流畅。每个单词都发音到位，语音的完整性也很好，最重要的是语速和节奏把握得非常好。
+                    </div>
+                    <div class="feedback-highlights excellent">
+                        <h4>让我来具体说说你做得好的地方：</h4>
+                        <ul>
+                            <li>你的准确度达到了 1.61，说明音素发音很标准，几乎没有错误</li>
+                            <li>完整度 1.81 特别高，这意味着你把每个单词都说完整了</li>
+                            <li>流畅度 1.81 说明你的语速控制得很好，听起来很自然</li>
+                            <li>韵律 1.78 很棒，重音和语调都把握得很准确</li>
+                            <li>总体来说，你的英语发音已经达到了很高的水平</li>
+                        </ul>
+                    </div>
+                    <div class="feedback-suggestions">
+                        <h4>接下来你可以尝试：</h4>
+                        <ul>
+                            <li>继续保持这个发音标准，你已经在正确的路上了</li>
+                            <li>可以挑战一些更长、更复杂的句子，锻炼连续语音的能力</li>
+                            <li>多和母语者交流，进一步感受自然对话的节奏</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level 2: Good -->
+        <div class="card">
+            <h2>良好级别反馈 (Good Level)</h2>
+            <div class="feedback-section">
+                <div class="feedback-card good">
+                    <span class="feedback-icon">👍</span>
+                    <span class="feedback-level good">良好</span>
+                    <div class="feedback-title">很不错！你的发音基础很扎实</div>
+                    <div class="feedback-description">
+                        你的总分是 1.05 分，这已经是一个不错的成绩了！我能听懂你说的大部分内容，发音也比较清晰。看得出来你在发音上花了不少功夫，整体水平已经很接近优秀了。不过还有一些细节可以再打磨一下，相信通过练习会越来越好。
+                    </div>
+                    <div class="feedback-highlights good">
+                        <h4>你做得不错的地方：</h4>
+                        <ul>
+                            <li>整体发音清晰，我能够清楚地理解你的意思</li>
+                            <li>大部分单词都发音正确，基础很好</li>
+                            <li>完整度保持得不错，单词都说完整了</li>
+                            <li>语速适中，不会太快也不会太慢</li>
+                        </ul>
+                    </div>
+                    <div class="feedback-suggestions">
+                        <h4>我建议你重点关注这些方面：</h4>
+                        <ul>
+                            <li>准确度目前是 0.95，可以更仔细地练习每个音素的发音，特别是那些容易混淆的音</li>
+                            <li>流畅度 0.88 还可以提升，试着让语速更自然一些，减少不必要的停顿</li>
+                            <li>韵律方面（0.75）需要加强，多注意单词的重音位置和句子的语调起伏</li>
+                            <li>建议你多听一些标准的英语发音，然后模仿他们的语音语调</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level 3: Needs Improvement -->
+        <div class="card">
+            <h2>需改进级别反馈 (Needs Improvement Level)</h2>
+            <div class="feedback-section">
+                <div class="feedback-card needs-improvement">
+                    <span class="feedback-icon">💪</span>
+                    <span class="feedback-level needs-improvement">需改进</span>
+                    <div class="feedback-title">加油！我们一起努力改进发音</div>
+                    <div class="feedback-description">
+                        我看到你的总分是 0.31 分，虽然还有提升空间，但请别灰心！每个人的学习之路都不一样，重要的是你现在开始关注发音了。我注意到有些地方需要特别注意，不过没关系，通过系统的练习，你一定能够取得明显进步的。相信我，坚持下去就会有收获！
+                    </div>
+                    <div class="feedback-highlights needs-improvement">
+                        <h4>我们需要一起关注这些问题：</h4>
+                        <ul>
+                            <li>准确度（0.00）需要重点提升，有些音素的发音需要纠正</li>
+                            <li>流畅度（0.42）还不够，语速控制和平稳度都需要练习</li>
+                            <li>韵律（0.39）方面要加强，重音和语调的变化要更自然</li>
+                            <li>完整度还可以，但在某些单词上还可以更清晰一些</li>
+                            <li>整体来说，基础发音技能还需要进一步巩固</li>
+                        </ul>
+                    </div>
+                    <div class="feedback-suggestions">
+                        <h4>我的建议是：</h4>
+                        <ul>
+                            <li>每天坚持练习 15-20 分钟，循序渐进，不要急于求成</li>
+                            <li>重点练习那些得分较低的单词，一个一个攻克</li>
+                            <li>多听标准英语发音，可以看英语视频、听英语播客，感受自然的语音</li>
+                            <li>尝试录音练习，然后对比标准发音，找出差异</li>
+                            <li>可以找一些发音教程或者使用专门的发音学习应用，系统性地学习</li>
+                            <li>记住，发音是一个过程，每天进步一点点就够了</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card" style="text-align: center; color: var(--text-light);">
+            <p>💡 <strong>关于反馈系统</strong></p>
+            <p style="margin-top: 10px;">
+                我们的AI系统会根据您的发音表现，自动给出三个级别的反馈：<br>
+                <strong>优秀</strong>（总分 ≥ 1.5）| <strong>良好</strong>（0.8 ≤ 总分 < 1.5）| <strong>需改进</strong>（总分 < 0.8）
+            </p>
+            <p style="margin-top: 15px; font-size: 0.9rem;">
+                GOPT (Goodness of Pronunciation Transformer) - 基于 Transformer 的多维度英语发音评估系统
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
