@@ -107,6 +107,11 @@ Base image is `kaldiasr/kaldi:latest`. The Dockerfile additionally installs:
 pip install fastapi uvicorn aiofiles python-multipart openai-whisper numba psutil pydantic
 ```
 
+**If you get SSL certificate errors** (common on corporate/university networks):
+```cmd
+pip install fastapi uvicorn aiofiles python-multipart openai-whisper numba psutil pydantic --trusted-host pypi.org --trusted-host files.pythonhosted.org --trusted-host pypi.python.org
+```
+
 > `openai-whisper` requires `ffmpeg`. If you don't have ffmpeg installed:
 > ```powershell
 > powershell -ExecutionPolicy Bypass -File install_ffmpeg.ps1
@@ -493,9 +498,15 @@ Auto-converts to 16kHz mono WAV using the bundled ffmpeg.
 
 **Symptom**: `docker compose build` fails with `COPY failed: file not found: process_custom_audio_fixed.sh`
 
-**Cause**: `process_custom_audio_fixed.sh` file is missing. Dockerfile line 117 requires this file.
+**Cause**: `process_custom_audio_fixed.sh` file is missing. Dockerfile line 117 requires this file. You may be building from the wrong branch — the `main` branch does not have this file.
 
-**Solution**: Create this file in the project root:
+**Solution**: Switch to the correct branch first:
+```bash
+git checkout fix/pipeline-normalization-docker-web
+docker compose build
+```
+
+If the file is still missing after switching branches, create it manually in the project root:
 ```bash
 #!/bin/bash
 bash /workspace/scripts/run_pipeline_auto.sh "$@"

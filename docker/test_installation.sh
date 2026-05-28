@@ -68,10 +68,12 @@ print_info "Testing GOPT installation..."
 if [ -d "/workspace/gopt" ]; then
     print_success "GOPT directory found"
     
-    if [ -f "/workspace/gopt/src/models/gopt.py" ]; then
-        print_success "GOPT model code found"
+    if [ -f "/workspace/gopt/models.py" ]; then
+        print_success "GOPT model code found (models.py)"
+    elif [ -f "/workspace/gopt/src/models.py" ]; then
+        print_success "GOPT model code found (src/models.py)"
     else
-        print_error "GOPT model code not found"
+        print_error "GOPT model code not found (checked /workspace/gopt/models.py)"
     fi
     
     if [ -f "/workspace/gopt/pretrained_models/gopt_librispeech/best_audio_model.pth" ]; then
