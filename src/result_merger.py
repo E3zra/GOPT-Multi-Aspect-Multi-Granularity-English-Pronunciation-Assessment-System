@@ -158,32 +158,47 @@ class ResultMerger:
     def _merge_word_scores(
         self,
         segment_results: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """
         Concatenate word-level scores from all segments.
         
-        Renumbers word_id to be sequential across all segments.
+        Handles two formats:
+        1. Dict of arrays: {"accuracy": [...], "stress": [...], "total": [...]}
+           (produced by GOPT pipeline)
+        2. List of dicts: [{"word_id": 0, "word_text": "HI", "accuracy": 1.66, ...}]
+           (expected format)
         
         Args:
             segment_results: List of result dictionaries
             
         Returns:
-            Concatenated list of word score dictionaries
+            Merged word scores in dict-of-arrays format
         """
-        merged_words = []
-        current_word_id = 0
+        merged = {'accuracy': [], 'stress': [], 'total': []}
         
         for result in segment_results:
-            word_scores = result.get('word_scores', [])
+            word_scores = result.get('word_scores', {})
             
-            for word_score in word_scores:
-                # Create new word score entry with renumbered id
-                merged_word = word_score.copy()
-                merged_word['word_id'] = current_word_id
-                merged_words.append(merged_word)
-                current_word_id += 1
+            if isinstance(word_scores, dict):
+                # Pipeline format: dict of arrays
+                for key in ['accuracy', 'stress', 'total']:
+                    vals = word_scores.get(key, [])
+                    if isinstance(vals, list):
+                        merged[key].extend(vals)
+                    else:
+                        # Handle numpy arrays or single values
+                        merged[key].append(float(vals))
+            elif isinstance(word_scores, list):
+                # Legacy format: list of dicts
+                for word_score in word_scores:
+                    if isinstance(word_score, dict):
+                        for key in ['accuracy', 'stress', 'total']:
+                            merged[key].append(word_score.get(key, 0.0))
+                    else:
+                        # If items are plain values, just append
+                        merged['total'].append(float(word_score))
         
-        return merged_words
+        return merged
     
     def _merge_phone_scores(
         self,
