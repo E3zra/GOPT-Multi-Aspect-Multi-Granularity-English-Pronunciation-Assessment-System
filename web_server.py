@@ -41,6 +41,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Prevent MSYS2 path conversion when running on Windows Git Bash
+# Without this, paths like /workspace/... get mangled to C:/Program Files/Git/workspace/...
+os.environ["MSYS_NO_PATHCONV"] = "1"
+os.environ["MSYS2_ARG_CONV_EXCL"] = "*"
+
 # Add src to path for G2P helper and segmentation modules
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
@@ -393,7 +398,7 @@ async def run_docker_process(task_id: str, audio_filename: str, transcript: str)
         
         if SEGMENTATION_AVAILABLE:
             try:
-                segmenter = TextSegmenter(max_phonemes=45)
+                segmenter = TextSegmenter(max_phonemes=100)
                 text_segments = segmenter.segment_transcript(transcript)
                 
                 total_phonemes = sum(seg.phoneme_count for seg in text_segments)
