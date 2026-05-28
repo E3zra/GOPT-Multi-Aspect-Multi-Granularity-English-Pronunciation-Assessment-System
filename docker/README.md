@@ -4,8 +4,35 @@ This directory contains helper scripts for running GOPT in Docker.
 
 ## Scripts
 
-### 1. `run_pipeline.sh`
-Main automation script for the full GOPT pipeline.
+### 0. `run_pipeline_auto.sh` (RECOMMENDED)
+Fully automated pipeline script (939 lines). Handles all 8 steps end-to-end with no manual intervention.
+
+**Usage:**
+```bash
+docker exec -it gopt-pipeline /workspace/scripts/run_pipeline_auto.sh \
+  <audio_file> <transcript> [dataset_name]
+```
+
+**Example:**
+```bash
+docker exec -it gopt-pipeline /workspace/scripts/run_pipeline_auto.sh \
+  /workspace/audio_input/test.wav \
+  "HELLO WORLD" \
+  my_test
+```
+
+**What it does (fully automated):**
+1. Prepares Kaldi data directory
+2. Generates lexicon and phone transcripts
+3. Extracts MFCC features
+4. Extracts i-vectors
+5. Computes nnet3 output
+6. Runs Kaldi GOP extraction
+7. Extracts GOP features to CSV
+8. Converts to sequence format and runs GOPT inference
+
+### 1. `run_pipeline.sh` (LEGACY)
+Original pipeline script — requires manual Kaldi GOP extraction step.
 
 **Usage:**
 ```bash

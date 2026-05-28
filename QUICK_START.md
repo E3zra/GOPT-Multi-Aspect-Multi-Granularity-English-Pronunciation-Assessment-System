@@ -1,4 +1,17 @@
-# 🚀 GOPT 快速开始指南 - 持久化版本
+﻿# GOPT Quick Start Guide
+
+> **⚠️ DEPRECATED / OUTDATED**
+> 
+> This document is written in Chinese and contains **outdated information** including references to non-existent files:
+> - `test_user_audio.py` [OUTDATED — file does not exist]
+> - `REBUILD_GUIDE.md` [OUTDATED — file does not exist]
+> - `MODEL_SETUP_GUIDE.md` [OUTDATED — file does not exist]
+> - `PROCESS_YOUR_AUDIO_GUIDE.md` [OUTDATED — file does not exist]
+> 
+> **For the current, verified setup guide in English, see [START_LOCAL.md](START_LOCAL.md).**
+
+---
+
 
 ## 📌 新特性
 

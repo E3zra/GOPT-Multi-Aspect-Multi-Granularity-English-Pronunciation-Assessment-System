@@ -1,4 +1,17 @@
-# 🎉 GOPT Web 界面 - 开始使用
+﻿# GOPT Web Interface - Getting Started
+
+> **⚠️ DEPRECATED / OUTDATED**
+> 
+> This document is written in Chinese and contains **outdated information** including references to non-existent files:
+> - `WEB_INTERFACE_QUICKSTART.md` [OUTDATED — file does not exist]
+> - `WEB_INTERFACE_GUIDE.md` [OUTDATED — file does not exist]
+> - `TUTORIAL_BEGINNER.md` [OUTDATED — file does not exist]
+> - `pip install -r requirements.txt` is WRONG for host-side setup (missing host packages)
+> 
+> **For the current, verified setup guide in English, see [START_LOCAL.md](START_LOCAL.md).**
+
+---
+
 
 ## ✅ 实施已完成
 

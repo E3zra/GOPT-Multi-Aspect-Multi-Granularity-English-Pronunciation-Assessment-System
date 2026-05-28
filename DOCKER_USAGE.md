@@ -1,6 +1,15 @@
 # GOPT Docker Guide
 
-This document supersedes the previous quick-start, walkthrough, and Kaldi notes. It describes how to run the full Kaldi → GOP → GOPT pipeline in a single container.
+> **⚠️ NOTE**: This document describes the **original manual workflow**. It is largely superseded by the automated pipeline script `docker/run_pipeline_auto.sh`. For the current setup guide, see **[START_LOCAL.md](START_LOCAL.md)**.
+>
+> The automated workflow is:
+> ```bash
+> docker exec gopt-pipeline bash /workspace/gopt/process_custom_audio.sh \
+>   /workspace/audio_input/your_audio.wav "TRANSCRIPT TEXT" output_name
+> ```
+> The manual steps below (sections 4.2–4.4) are kept for reference only.
+
+This document describes how to run the full Kaldi → GOP → GOPT pipeline in a single container.
 
 ---
 
