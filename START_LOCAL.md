@@ -367,6 +367,13 @@ curl http://localhost:8080/health
 
 Returns: `docker_running`, `whisper_available`, `segmentation_available` status.
 
+### 6.5 Provided Test Audio Files
+
+Three test audio files are provided in `testing_audio_file/` folder:
+- Use these to verify the system works correctly after setup
+- Expected score range: 0.8 to 1.3 (Total score)
+- If scores are completely wrong (e.g. all 0 or all 2.0), the pipeline has an issue
+
 ---
 
 ## 7. Daily Usage
