@@ -198,27 +198,27 @@ PCC = Pearson Correlation Coefficient (higher is better). Best-single-run result
 
 ```
 gopt/
-鈹溾攢鈹€ src/                    # Core source code
-鈹?  鈹溾攢鈹€ models/gopt.py      # GOPT Transformer model
-鈹?  鈹溾攢鈹€ traintest.py        # Training and evaluation
-鈹?  鈹溾攢鈹€ whisper_asr.py      # Whisper ASR integration
-鈹?  鈹溾攢鈹€ extract_kaldi_gop/  # Kaldi GOP feature extraction
-鈹?  鈹溾攢鈹€ prep_data/          # Data preprocessing
-鈹?  鈹斺攢鈹€ utils/              # G2P helper, data utilities
-鈹溾攢鈹€ pretrained_models/      # Pretrained model weights (3 models)
-鈹溾攢鈹€ data/                   # Training/test datasets
-鈹溾攢鈹€ docker/                 # Docker scripts
-鈹溾攢鈹€ static/                 # Web frontend (HTML/CSS/JS)
-鈹溾攢鈹€ tests/                  # Unit tests
-鈹溾攢鈹€ scripts/                # Benchmark and utility scripts
-鈹溾攢鈹€ colab/                  # Google Colab notebook
-鈹溾攢鈹€ inference_api.py        # Python API
-鈹溾攢鈹€ inference_cli.py        # CLI interface
-鈹溾攢鈹€ inference_server.py     # REST API server
-鈹溾攢鈹€ web_server.py           # Web interface server
-鈹溾攢鈹€ docker-compose.yml      # Docker Compose config
-鈹溾攢鈹€ Dockerfile
-鈹斺攢鈹€ requirements.txt
+├── src/                    # Core source code
+│   ├── models/gopt.py      # GOPT Transformer model
+│   ├── traintest.py        # Training and evaluation
+│   ├── whisper_asr.py      # Whisper ASR integration
+│   ├── extract_kaldi_gop/  # Kaldi GOP feature extraction
+│   ├── prep_data/          # Data preprocessing
+│   └── utils/              # G2P helper, data utilities
+├── pretrained_models/      # Pretrained model weights (3 models)
+├── data/                   # Training/test datasets
+├── docker/                 # Docker scripts
+├── static/                 # Web frontend (HTML/CSS/JS)
+├── tests/                  # Unit tests
+├── scripts/                # Benchmark and utility scripts
+├── colab/                  # Google Colab notebook
+├── inference_api.py        # Python API
+├── inference_cli.py        # CLI interface
+├── inference_server.py     # REST API server
+├── web_server.py           # Web interface server
+├── docker-compose.yml      # Docker Compose config
+├── Dockerfile
+└── requirements.txt
 ```
 
 ---
@@ -231,40 +231,39 @@ The SpeechOcean762 dataset is licensed under CC BY 4.0 and can be downloaded fro
 
 ---
 
-## 涓枃璇存槑
 
-### 椤圭洰绠€浠?
+## About This Project
 
-杩欐槸涓€涓?*鑻辫鍙戦煶鑷姩璇勪及绯荤粺**锛屽熀浜?ICASSP 2022 璁烘枃 [GOPT](https://arxiv.org/abs/2205.03432) 寮€鍙戙€?
+This is an **English pronunciation automatic assessment system** based on the ICASSP 2022 paper [GOPT](https://arxiv.org/abs/2205.03432).
 
-**鍔熻兘**锛氳緭鍏ヤ竴娈佃嫳璇煶棰戝拰瀵瑰簲鏂囨湰锛岀郴缁熻嚜鍔ㄧ粰鍑哄彂闊宠瘎鍒嗭細
+**Functionality**: Given an English audio recording and its corresponding text, the system automatically produces pronunciation scores:
 
-- **璇勫垎缁村害**锛氬噯纭害銆佹祦鍒╁害銆侀煹寰嬨€佸畬鏁村害
-- **璇勫垎绮掑害**锛氶煶绱犵骇锛堟瘡涓煶锛夈€佸崟璇嶇骇锛堟瘡涓瘝锛夈€佸彞瀛愮骇锛堟暣鍙ヨ瘽锛?
+- **Scoring dimensions**: Accuracy, Fluency, Prosody, Completeness
+- **Scoring granularity**: Phoneme-level (each sound), Word-level (each word), Utterance-level (full sentence)
 
-### 鏈?Fork 鏂板鍔熻兘
+### Features Added in This Fork
 
-| 鍔熻兘 | 璇存槑 |
-|------|------|
-| **缃戦〉鐣岄潰** | 娴忚鍣ㄤ笂浼犻煶棰戯紝鑷姩璇勫垎锛屽彲瑙嗗寲鍙嶉锛堥鑹叉爣娉ㄥソ/涓?宸級 |
-| **Docker 涓€閿儴缃?* | 鏃犻渶鎵嬪姩瀹夎 Kaldi锛宍docker-compose up` 鍗冲彲浣跨敤 |
-| **Whisper 璇煶璇嗗埆** | 鑷姩灏嗛煶棰戣浆涓烘枃鏈紝鏃犻渶鎵嬪姩杈撳叆 |
-| **OOV 鑷姩澶勭悊** | 閬囧埌璇嶅吀澶栫殑鐢熻瘝鑷姩鐢?G2P 杞煶绱?|
-| **闀块煶棰戝垎娈?* | 鑷姩灏嗛暱褰曢煶鍒囧垎涓哄彲澶勭悊鐨勭墖娈?|
-| **澶氭牸寮忔敮鎸?* | WAV銆丮P3銆丮4A銆丗LAC 绛夎嚜鍔ㄨ浆鎹?|
+| Feature | Description |
+|---------|-------------|
+| **Web Interface** | Upload audio in browser, automatic scoring, visual feedback (color-coded: good/fair/poor) |
+| **Docker One-Click Deployment** | No manual Kaldi installation needed, just ``docker-compose up`` |
+| **Whisper Speech Recognition** | Automatic audio-to-text transcription, no manual input required |
+| **Automatic OOV Handling** | Out-of-vocabulary words are automatically converted to phonemes using G2P |
+| **Long Audio Segmentation** | Automatically splits long recordings into processable segments |
+| **Multiple Format Support** | WAV, MP3, M4A, FLAC etc. auto-converted |
 
-### 蹇€熷紑濮?
+### Quick Start
 
 ```bash
-# 1. 鍚姩 Docker 瀹瑰櫒
+# 1. Start Docker container
 docker-compose build && docker-compose up -d
 
-# 2. 鍚姩缃戦〉鏈嶅姟
+# 2. Start web server
 python web_server.py
 
-# 3. 娴忚鍣ㄦ墦寮€ http://localhost:8080
+# 3. Open http://localhost:8080 in browser
 ```
 
-### 鑷磋阿
+### Acknowledgments
 
-鏈」鐩殑鏍稿績绠楁硶鏉ヨ嚜 [YuanGongND/gopt](https://github.com/YuanGongND/gopt)锛圡IT & PAII 鍥㈤槦锛夈€傛湰 Fork 鍦ㄥ叾鍩虹涓婂鍔犱簡 Web 鐣岄潰銆丏ocker 閮ㄧ讲銆乄hisper ASR 绛夊姛鑳姐€?
+The core algorithm of this project comes from [YuanGongND/gopt](https://github.com/YuanGongND/gopt) (MIT & PAII team). This fork adds a Web interface, Docker deployment, Whisper ASR, and other features on top of the original work.
