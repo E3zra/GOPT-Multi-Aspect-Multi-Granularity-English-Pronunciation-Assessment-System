@@ -47,6 +47,7 @@ exp/
 
 # Temp
 temp/
+data/temp_custom_audio/
 
 # PDFs
 *.pdf
