@@ -76,6 +76,10 @@ RUN pip3 install --no-cache-dir openai-whisper numba
 # Copy GOPT project files
 COPY . .
 
+# Ensure models.py is available in all import locations
+RUN cp models.py src/models.py 2>/dev/null || true && \
+    cp models.py pretrained_models/models.py 2>/dev/null || true
+
 # Create necessary directories
 RUN mkdir -p \
     /workspace/gopt/data/raw_kaldi_gop/custom_audio \
