@@ -471,9 +471,14 @@ function displayResults(data) {
     // Display feedback
     displayFeedback(results);
 
-    // Display word scores
-    if (results.word_scores && results.word_scores.length > 0) {
-        displayWordScores(results.word_scores);
+    // Display word scores (handle both dict and array formats)
+    if (results.word_scores) {
+        const hasWordScores = Array.isArray(results.word_scores) 
+            ? results.word_scores.length > 0 
+            : (results.word_scores.total && results.word_scores.total.length > 0);
+        if (hasWordScores) {
+            displayWordScores(results.word_scores);
+        }
     }
 
     // Display phone scores
@@ -518,7 +523,36 @@ function displayWordScores(wordScores) {
     
     wordSentence.innerHTML = '';
 
-    wordScores.forEach((wordData, index) => {
+    // Handle both dict-of-arrays format and list-of-objects format
+    let wordDataList = [];
+    
+    if (Array.isArray(wordScores)) {
+        // Legacy format: list of objects with word_text, total, etc.
+        wordDataList = wordScores;
+    } else if (wordScores && typeof wordScores === 'object') {
+        // Pipeline format: dict of arrays {accuracy: [...], stress: [...], total: [...]}
+        const totals = wordScores.total || [];
+        const accuracies = wordScores.accuracy || [];
+        const stresses = wordScores.stress || [];
+        
+        const count = totals.length;
+        for (let i = 0; i < count; i++) {
+            wordDataList.push({
+                word_text: `Phone ${i+1}`,
+                accuracy: accuracies[i] || 0,
+                stress: stresses[i] || 0,
+                total: totals[i] || 0,
+                phone_count: 1
+            });
+        }
+    }
+    
+    if (wordDataList.length === 0) {
+        wordScoresSection.style.display = 'none';
+        return;
+    }
+
+    wordDataList.forEach((wordData, index) => {
         const wordSpan = document.createElement('span');
         wordSpan.className = 'word-item';
         
@@ -531,8 +565,8 @@ function displayWordScores(wordScores) {
         else colorClass = 'score-very-low';
         
         wordSpan.classList.add(colorClass);
-        wordSpan.textContent = wordData.word_text;
-        wordSpan.title = `总分: ${wordData.total.toFixed(2)}`;
+        wordSpan.textContent = wordData.word_text || `Word ${index+1}`;
+        wordSpan.title = `总分: ${(wordData.total || 0).toFixed(2)}`;
         
         // Store word data for tooltip
         wordSpan.dataset.wordData = JSON.stringify(wordData);
@@ -545,7 +579,7 @@ function displayWordScores(wordScores) {
         wordSentence.appendChild(wordSpan);
         
         // Add space between words (except after last word)
-        if (index < wordScores.length - 1) {
+        if (index < wordDataList.length - 1) {
             const space = document.createTextNode(' ');
             wordSentence.appendChild(space);
         }
@@ -694,8 +728,13 @@ function calculateFeedback(results) {
     // Calculate average scores
     const avgScore = (accuracy + completeness + fluency + prosodic) / 4;
     
-    // Analyze word scores
-    const validWordScores = wordScores.filter(w => w.total && w.total > 0);
+    // Analyze word scores (handle both array and dict formats)
+    let validWordScores = [];
+    if (Array.isArray(wordScores)) {
+        validWordScores = wordScores.filter(w => w.total && w.total > 0);
+    } else if (wordScores && wordScores.total && Array.isArray(wordScores.total)) {
+        validWordScores = wordScores.total.filter(t => t > 0).map(t => ({ total: t }));
+    }
     const avgWordScore = validWordScores.length > 0
         ? validWordScores.reduce((sum, w) => sum + w.total, 0) / validWordScores.length
         : 0;
